@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Sort;
 
 import com.example.domains.contracts.repositories.ActorRepository;
+import com.example.domains.contracts.services.ActorService;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.ActorShort;
@@ -20,8 +21,10 @@ public class DemoApplication implements CommandLineRunner {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
+//	@Autowired
+//	ActorRepository dao;
 	@Autowired
-	ActorRepository dao;
+	ActorService srv;
 
 	@Override
 	@Transactional
@@ -63,8 +66,10 @@ public class DemoApplication implements CommandLineRunner {
 //		dao.findByActorIdGreaterThanEqual(200).forEach(f-> System.out.println(ActorDTO.from(f)));
 //		dao.readByActorIdGreaterThanEqual(200).forEach(System.out::println);
 //		dao.queryByActorIdGreaterThanEqual(200).forEach(f -> System.out.println(f.getId() + " " + f.getNombre()));
-		dao.searchByActorIdGreaterThanEqual(200, ActorDTO.class).forEach(System.out::println);
-		dao.searchByActorIdGreaterThanEqual(200, ActorShort.class).forEach(f -> System.out.println(f.getId() + " " + f.getNombre()));
+//		dao.searchByActorIdGreaterThanEqual(200, ActorDTO.class).forEach(System.out::println);
+//		dao.searchByActorIdGreaterThanEqual(200, ActorShort.class).forEach(f -> System.out.println(f.getId() + " " + f.getNombre()));
+//		srv.getAll().forEach(System.out::println);
+//		srv.add(new Actor(1, "PP", "12345678z"));
 	}
 	
 	@Transactional

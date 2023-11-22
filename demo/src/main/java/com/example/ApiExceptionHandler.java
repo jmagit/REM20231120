@@ -147,7 +147,7 @@ public class ApiExceptionHandler {
 		return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
 	}
 
-	@ExceptionHandler({ InvalidDataException.class/*, MethodArgumentNotValidException.class*/ })
+	@ExceptionHandler({ InvalidDataException.class, MethodArgumentNotValidException.class })
 	public ProblemDetail invalidData(Exception exception) {
 		var problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Datos invalidos");
 		if (exception instanceof InvalidDataException ex && ex.hasErrors()) {

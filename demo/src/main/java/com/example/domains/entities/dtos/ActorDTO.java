@@ -15,7 +15,7 @@ public class ActorDTO {
 	private int actorId;
 	@NotBlank
 	@Size(max = 45, min=2)
-	@Pattern(regexp = "^[A-Z]+$", message = "debe estar en mayúsculas")
+//	@Pattern(regexp = "^[A-Z]+$", message = "debe estar en mayúsculas")
 	@JsonProperty("nombre")
 	private String firstName;
 	@NotBlank

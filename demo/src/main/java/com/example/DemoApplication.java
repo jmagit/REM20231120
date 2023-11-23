@@ -1,19 +1,19 @@
 package com.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Sort;
-
-import com.example.domains.contracts.repositories.ActorRepository;
-import com.example.domains.contracts.services.ActorService;
-import com.example.domains.entities.Actor;
-import com.example.domains.entities.dtos.ActorDTO;
-import com.example.domains.entities.dtos.ActorShort;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 import jakarta.transaction.Transactional;
 
+@EnableDiscoveryClient
+@EnableFeignClients("com.example.application.proxies")
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
@@ -23,8 +23,19 @@ public class DemoApplication implements CommandLineRunner {
 
 //	@Autowired
 //	ActorRepository dao;
-	@Autowired
-	ActorService srv;
+//	@Autowired
+//	ActorService srv;
+
+	@Bean 
+	RestTemplate srvRT(RestTemplateBuilder builder) {
+		return builder.build();
+	}
+	
+	@Bean 
+	@LoadBalanced
+	RestTemplate srvRTLB(RestTemplateBuilder builder) {
+		return builder.build();
+	}
 
 	@Override
 	@Transactional
@@ -71,10 +82,10 @@ public class DemoApplication implements CommandLineRunner {
 //		srv.getAll().forEach(System.out::println);
 //		srv.add(new Actor(1, "PP", "12345678z"));
 	}
-	
-	@Transactional
-	void transaccion() {
-		//...
-	}
+//	
+//	@Transactional
+//	void transaccion() {
+//		//...
+//	}
 
 }

@@ -60,21 +60,15 @@ public class FilmResource {
 
 	@Hidden
 	@GetMapping(params = "page")
-	public Page<FilmShortDTO> getAll(Pageable pageable,
-			@RequestParam(defaultValue = "short") String mode) {
+	public Page<FilmShortDTO> getAll(Pageable pageable, @RequestParam(defaultValue = "short") String mode) {
 		return srv.getByProjection(pageable, FilmShortDTO.class);
 	}
 
-	@Operation(
-			summary = "Listado de las peliculas", 
-			description = "Recupera la lista de peliculas en formato corto o detallado, se puede paginar.", 
-			parameters = {
-					@Parameter(in = ParameterIn.QUERY, name = "mode", required = false, description = "Formato de las peliculas", schema = @Schema(type = "string", allowableValues = {
-					"details", "short" }, defaultValue = "short")) },
-			responses = {
-					@ApiResponse(responseCode = "200", description = "OK", content = 
-							@Content(mediaType = "application/json", schema = @Schema(anyOf = {FilmShortDTO.class, FilmDetailsDTO.class}) ))
-			})
+	@Operation(summary = "Listado de las peliculas", description = "Recupera la lista de peliculas en formato corto o detallado, se puede paginar.", parameters = {
+			@Parameter(in = ParameterIn.QUERY, name = "mode", required = false, description = "Formato de las peliculas", schema = @Schema(type = "string", allowableValues = {
+					"details", "short" }, defaultValue = "short")) }, responses = {
+							@ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(anyOf = {
+									FilmShortDTO.class, FilmDetailsDTO.class }))) })
 	@GetMapping(params = { "page", "mode=details" })
 	@PageableAsQueryParam
 	@Transactional
@@ -130,9 +124,13 @@ public class FilmResource {
 			FilmShortDTO.class, FilmDetailsDTO.class, FilmEditDTO.class })))
 	@ApiResponse(responseCode = "404", description = "Pelicula no encontrada", content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
 	public FilmEditDTO getOneEditar(
-			@Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id,
+			@Parameter(description = "Identificador de la pelicula", required = true) 
+			@PathVariable 
+			int id,
 			@Parameter(required = false, schema = @Schema(type = "string", allowableValues = { "details", "short",
-					"edit" }, defaultValue = "edit")) @RequestParam(required = false, defaultValue = "edit") String mode)
+					"edit" }, defaultValue = "edit")) 
+			@RequestParam(required = false, defaultValue = "edit") 
+			String mode)
 			throws Exception {
 		Optional<Film> rslt = srv.getOne(id);
 		if (rslt.isEmpty())
@@ -173,8 +171,7 @@ public class FilmResource {
 	public List<Map<String, String>> getClasificaciones() {
 		return List.of(Map.of("key", "G", "value", "Todos los públicos"),
 				Map.of("key", "PG", "value", "Guía paternal sugerida"),
-				Map.of("key", "PG-13", "value", "Guía paternal estricta"), 
-				Map.of("key", "R", "value", "Restringido"),
+				Map.of("key", "PG-13", "value", "Guía paternal estricta"), Map.of("key", "R", "value", "Restringido"),
 				Map.of("key", "NC-17", "value", "Prohibido para audiencia de 17 años y menos"));
 	}
 
@@ -186,8 +183,8 @@ public class FilmResource {
 	@Transactional
 	public ResponseEntity<Object> add(@RequestBody FilmEditDTO item) throws Exception {
 		Film newItem = srv.add(FilmEditDTO.from(item));
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newItem.getFilmId())
-				.toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newItem.getFilmId()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 
@@ -213,7 +210,7 @@ public class FilmResource {
 			throws Exception {
 		srv.deleteById(id);
 	}
-	
+
 	@Autowired
 	MeGustaProxy proxy;
 
@@ -231,9 +228,8 @@ public class FilmResource {
 	@SecurityRequirement(name = "bearerAuth")
 	@PostMapping(path = "{id}/like")
 	public String like(@Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id,
-			@Parameter(hidden = true) @RequestHeader(required = false) String authorization)
-			throws Exception {
-		if(authorization == null)
+			@Parameter(hidden = true) @RequestHeader(required = false) String authorization) throws Exception {
+		if (authorization == null)
 			return proxy.sendLike(id);
 		return proxy.sendLike(id, authorization);
 	}

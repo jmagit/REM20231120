@@ -10,11 +10,14 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.transaction.Transactional;
 
 @EnableDiscoveryClient
 @EnableFeignClients("com.example.application.proxies")
 @SpringBootApplication
+@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
 public class DemoApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
